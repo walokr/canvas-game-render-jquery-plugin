@@ -1,39 +1,85 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--
-	soccer-match-jquery-plugin 
-	https://github.com/walokr/soccer-match-jquery-plugin
+	canvas-game-render-jquery-plugin 
+	https://github.com/walokr/canvas-game-render-jquery-plugin
+	
+	test images used: http://untamed.wild-refuge.net/rmxpresources.php?cafe
 	
 -->
 <html>
     <head>
-        <title>Testing soccer-match-jquery-plugin</title>
+        <title>Testing canvas-game-render-jquery-plugin</title>
         <meta charset="UTF-8">
         <link rel="shortcut icon" href="favicon.ico">
-        <script type = 'text/javascript' src = 'lib/jquery-1.12.2.min.js'></script>
+		<script type = 'text/javascript' src = '../js/visualobject.js'></script>
+				
 		<script> 
+			window.onload = function() {
+				// Create the Viewport with associated Canvas.
+				var viewport = new Viewport(document.getElementById("myCanvas"));
+				// Desired Frames per second
+				viewport.setFps(20);
+				// Frames counts that sprites hold using the same tile
+				viewport.setSpritesFramesInSameValue(5);
+				// Background Layer
+				var bgLayer = new Layer();
+				viewport.addChild(bgLayer);
+				// Create the Angel parent layer 
+				var angelLayer = new Layer();
+				bgLayer.addChild(angelLayer);
+				// Create the angel Sprite (a 192x192 tiled image)
+				var angel = new Sprite();
+				// the name is not an Sprite property. You can get it writing angel.getPropertyValue("name")
+				angel.setOptions({"x": 100, "y": 100, "width": 48, "height": 48, 
+								  "sourceX": 48, "sourceY":48, "sourceWidth": 48, "sourceHeight": 48,  	
+								  "image": document.getElementById("angelImg") ,"name": "Angel",
+								  "states": {"goSouth": {"row": 0, "cols": [0,1,2,3]}, "goWest" : {"row": 1, "cols": [0,1,2,3]}, 
+								             "goEast" : {"row": 2, "cols": [0,1,2,3]}, "goNorth": {"row": 3, "cols": [0,1,2,3]}}});
+				angel.setCurrentState("goSouth");
+				// play with setAnimationsAfterMove in order to do more realism to the movements 
+				angel.setAnimationsAfterMove(1);
+				angelLayer.addChild(angel); 
+				
+				// Listen the buttons events and change the angel coordinates
+				document.getElementById("btnNorth").addEventListener("click", function(){
+					angel.setY(angel.getY()-5);
+					angel.setCurrentState("goNorth");
+				});
+				document.getElementById("btnEast").addEventListener("click", function(){
+					angel.setX(angel.getX()+5);
+					angel.setCurrentState("goEast");
+				});
+				document.getElementById("btnWest").addEventListener("click", function(){
+					angel.setX(angel.getX()-5);
+					angel.setCurrentState("goWest");
+				});
+				document.getElementById("btnSouth").addEventListener("click", function(){
+					angel.setY(angel.getY()+5);
+					angel.setCurrentState("goSouth");
+				});
+				
+				viewport.start();
+				
+			};
 			
 		</script>
-        <!--<script type = 'text/javascript' src = 'js/jquery.jcanvasmatchfield.js'></script>
-        <script type = 'text/javascript' src = 'js/utils.js'></script>
-        <script type = 'text/javascript' src = 'js/simulatordefines.js'></script>
-        <script type = 'text/javascript' src = 'js/weather.js'></script>
-        <script type = 'text/javascript' src = 'js/bodyparts.js'></script>
-        <script type = 'text/javascript' src = 'js/footballactors.js'></script>
-        <script type = 'text/javascript' src = 'js/teamdistribution.js'></script>
-        <script type = 'text/javascript' src = 'js/field.js'></script>
-        <script type = 'text/javascript' src = 'js/team.js'></script>
-        <script type = 'text/javascript' src = 'js/cyclicalvaluesprovider.js'></script>
-        <script type = 'text/javascript' src = 'js/trajectories.js'></script>
-        <script type = 'text/javascript' src = 'js/elevenplayersmatch.js'></script>
-        <script type = 'text/javascript' src = 'js/notinplaymanager.js'></script>
-        <script type = 'text/javascript' src = 'js/match.js'></script>
-		<script type = 'text/javascript' src = 'js/simulator.js'></script>
-        <script type = 'text/javascript' src = 'js/startmatch.js'></script>
-        <script type = 'text/javascript' src = 'js/startcanvasmatch.js'></script>-->
+        
     </head>
     <body >
-		<canvas id="myCanvas" width="200" height="400"></canvas>
+		<div>
+			<div>
+				<button id="btnNorth">North</button>
+				<button id="btnWest">West</button>
+				<button id="btnEast">East</button>
+				<button id="btnSouth" >South</button>
+			</div>
+			<canvas id="myCanvas" width="200" height="400"><!-- width and height of the viewport --></canvas>
+		</div>
 		<h3 id="debug">Last Event</h3>
         <div id="banner">banner</div>
+		<div style="display:none;">
+			<img id="ladyImg" src="img/loveless_soubi.png">
+			<img id="angelImg" src="img/angelsanctuary_alexiel.png">
+		</div>
     </body>    
 </html>
