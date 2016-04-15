@@ -1,2 +1,2 @@
-# soccer-match-jquery-plugin
-Soccer Match JQuery plugin (football also). 
+# javascript-canvas-game-renderer
+Javascript Canvas Game Renderer (football also). 
